@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="pcd_file" default="" doc="Path to a pcd file to stream"/>
+
+    <group ns="pcd_streamer">
+        <node pkg="nodelet" type="nodelet" name="nm" args="manager" output="screen"/>
+        <node pkg="nodelet" type="nodelet" name="streamer" args="load pcl/PCDReader nm" output="screen">
+            <remap from="streamer/output" to="stream"/>
+            <param name="~filename" value="$(arg pcd_file)"/>
+            <param name="~publish_rate" value="10"/>
+            <param name="~tf_frame" value="camera_rgb_optical_frame"/>
+        </node>
+    </group>
+
+</launch>
