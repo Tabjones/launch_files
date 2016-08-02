@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <arg name="file" default="C2B308B" doc="Ocado product number to stream. This must be a directory name with a bag file inside it with the same name."/>
+    <arg name="directory" default="/media/tabjones/storage/BagFiles/OcadoWP5/" doc="Location containing Ocado product numbers directories and BagFiles. (Remember to put a trailing / at the end)"/>
+
+    <rosparam param="/use_sim_time">true</rosparam>
+
+    <include file="$(find openni2_launch)/launch/openni2.launch">
+        <arg name="load_driver" value="false"/>
+    </include>
+
+    <node pkg="rviz" type="rviz" name="ocado_bag_viewer" output="screen" args="-d $(find launch_files)/config/ocado_bag_viewer.rviz"/>
+
+    <remap from="/camera/depth_registered/image_raw" to="/camera/depth/image_raw"/>
+    <remap from="/camera/depth_registered/camera_info" to="/camera/depth/camera_info"/>
+    <node pkg="rosbag" type="play" name="ocado_bag_player" output="screen" args="--clock --loop $(arg directory)$(arg file)/$(arg file).bag"/>
+
+</launch>
